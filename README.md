@@ -29,12 +29,12 @@ Before running this application, ensure you have:
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/shipment-history-ui.git
+   git clone https://github.com/Maximekgn/zovu.git
    ```
 
 2. Navigate to the project directory:
    ```bash
-   cd shipment-history-ui
+   cd zovu
    ```
 
 3. Install dependencies:
