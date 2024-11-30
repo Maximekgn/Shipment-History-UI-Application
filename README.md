@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shipment History UI Application
+
+This repository contains a responsive web application for displaying shipment history with an interactive timeline interface, built according to the provided design specifications.
+
+## Features
+
+- Interactive timeline showing shipment events
+- Responsive design for both desktop and mobile views
+- Support for delayed shipment and exception highlighting
+- Expandable comment sections
+- Clear status indicators with icons
+- Date grouping for multiple events
+- Montserrat font integration
+- Clarity Design Icons usage
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Before running this application, ensure you have:
+- Node.js (v16 or higher)
+- npm (v7 or higher) or yarn
+- A modern web browser
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation Steps
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/yourusername/shipment-history-ui.git
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Navigate to the project directory:
+   ```bash
+   cd shipment-history-ui
+   ```
 
-## Learn More
+3. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. Start the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Open your browser and visit `http://localhost:3000`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Usage
 
-## Deploy on Vercel
+The application displays shipment history in a timeline format with the following features:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Each date is shown only once for multiple events
+- Delayed shipments are highlighted with a distinct color
+- Shipment exceptions are marked with a unique color
+- City and state information adapts to screen size
+- Arrived shipments show a map marker icon
+- Delivered shipments display a check icon
+- Long comments can be expanded/collapsed
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Technologies Used
+
+- Next.js
+- TypeScript
+- Tailwind CSS
+- React Icons

@@ -1,17 +1,16 @@
 "use client"
 import {
-  CheckCircle2,
-  Clock,
-  AlertTriangle,
-  Truck,
-  MapPin,
-  Warehouse,
-  Plane,
-  Ship,
-  Box,
-  ChevronDown,
-  ChevronUp
-} from 'lucide-react'
+  BsCheckCircle as ClarityCheckCircleIcon,
+  BsClock as ClarityClockIcon,
+  BsExclamationTriangle as ClarityAlertTriangleIcon,
+  BsTruck as ClarityTruckIcon,
+  BsGeoAlt as ClarityMapMarkerIcon,
+  BsShop as ClarityStorefrontIcon,
+  BsAirplane as ClarityAirplaneIcon,
+  BsWater as ClarityShipIcon,
+  BsBox as ClarityBoxIcon,
+  BsChevronDown as ClarityAngleIcon
+} from 'react-icons/bs'
 import { cn } from "@/lib/utils"
 import { useState } from 'react'
 
@@ -42,18 +41,21 @@ export default function ShipmentHistory({ steps }: ShipmentHistoryProps) {
   }
 
   const getStepIcon = (step: ShipmentStep) => {
+    const iconBaseClasses = "w-5 h-5 flex items-center justify-center rounded-full border-2 bg-white"
+    const iconColor = "text-gray-700"
+    
     if (step.title === "DELIVERED") {
       return (
-        <div className="rounded-full p-0.5">
-          <CheckCircle2 className="w-3 h-3 text-white" />
+        <div className={iconBaseClasses}>
+          <ClarityCheckCircleIcon className={`w-3 h-3 ${iconColor}`} />
         </div>
       )
     }
 
     if (step.title.toLowerCase().includes("arrived")) {
       return (
-        <div className="rounded-full p-0.5">
-          <MapPin className="w-3 h-3 text-white" />
+        <div className={iconBaseClasses}>
+          <ClarityMapMarkerIcon className={`w-3 h-3 ${iconColor}`} />
         </div>
       )
     }
@@ -62,80 +64,79 @@ export default function ShipmentHistory({ steps }: ShipmentHistoryProps) {
       const title = step.title.toLowerCase()
       if (title.includes('transit')) {
         return (
-          <div className="rounded-full p-0.5">
-            <Truck className="w-3 h-3 text-white" />
+          <div className={iconBaseClasses}>
+            <ClarityTruckIcon className={`w-3 h-3 ${iconColor}`} />
           </div>
         )
       }
       if (title.includes('warehouse') || title.includes('facility')) {
         return (
-          <div className="rounded-full p-0.5">
-            <Warehouse className="w-3 h-3 text-white" />
+          <div className={iconBaseClasses}>
+            <ClarityStorefrontIcon className={`w-3 h-3 ${iconColor}`} />
           </div>
         )
       }
       if (title.includes('air')) {
         return (
-          <div className="rounded-full p-0.5">
-            <Plane className="w-3 h-3 text-white" />
+          <div className={iconBaseClasses}>
+            <ClarityAirplaneIcon className={`w-3 h-3 ${iconColor}`} />
           </div>
         )
       }
       if (title.includes('ship')) {
         return (
-          <div className="rounded-full p-0.5">
-            <Ship className="w-3 h-3 text-white" />
+          <div className={iconBaseClasses}>
+            <ClarityShipIcon className={`w-3 h-3 ${iconColor}`} />
           </div>
         )
       }
       if (title.includes('package')) {
         return (
-          <div className="rounded-full p-0.5">
-            <Box className="w-3 h-3 text-white" />
+          <div className={iconBaseClasses}>
+            <ClarityBoxIcon className={`w-3 h-3 ${iconColor}`} />
           </div>
         )
       }
       return (
-        <div className="rounded-full p-0.5">
-          <CheckCircle2 className="w-3 h-3 text-white" />
+        <div className={iconBaseClasses}>
+          <ClarityCheckCircleIcon className={`w-3 h-3 ${iconColor}`} />
         </div>
       )
     }
     
     if (step.status === "delayed" || step.shipmentIsDelayed) {
       return (
-        <div className="rounded-full p-0.5">
-          <AlertTriangle className="w-3 h-3 text-white" />
+        <div className={iconBaseClasses}>
+          <ClarityAlertTriangleIcon className={`w-3 h-3 ${iconColor}`} />
         </div>
       )
     }
     
     if (step.status === "current") {
       return (
-        <div className="rounded-full p-0.5 w-5 h-5 flex items-center justify-center">
+        <div className={iconBaseClasses}>
         </div>
       )
     }
     
     if (step.status === "scheduled") {
       return (
-        <div className="rounded-full p-0.5">
-          <Clock className="w-3 h-3 text-white" />
+        <div className={iconBaseClasses}>
+          <ClarityClockIcon className={`w-3 h-3 ${iconColor}`} />
         </div>
       )
     }
 
     if (step.status === "in_transit") {
       return (
-        <div className="rounded-full p-0.5">
-          <Truck className="w-3 h-3 text-white" />
+        <div className={iconBaseClasses}>
+          <ClarityTruckIcon className={`w-3 h-3 ${iconColor}`} />
         </div>
       )
     }
     
     return (
-      <div className="rounded-full p-0.5">
-        <Clock className="w-3 h-3 text-white" />
+      <div className={iconBaseClasses}>
       </div>
     )
   }
@@ -220,7 +221,7 @@ export default function ShipmentHistory({ steps }: ShipmentHistoryProps) {
                               onClick={() => toggleComment(stepIndex)}
                               className="text-xs sm:text-sm text-sky-700 mt-1 flex items-center"
                             >
-                              View All <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4 ml-1" />
+                              View All <ClarityAngleIcon className="w-3 h-3 sm:w-4 sm:h-4 ml-1" />
                             </button>
                           </>
                         ) : (
@@ -231,7 +232,7 @@ export default function ShipmentHistory({ steps }: ShipmentHistoryProps) {
                                 onClick={() => toggleComment(stepIndex)}
                                 className="text-xs sm:text-sm text-sky-700 mt-1 flex items-center"
                               >
-                                View Less <ChevronUp className="w-3 h-3 sm:w-4 sm:h-4 ml-1" />
+                                View Less <ClarityAngleIcon className="w-3 h-3 sm:w-4 sm:h-4 ml-1" />
                               </button>
                             )}
                           </>

@@ -11,12 +11,14 @@ interface ShipmentEvent {
         comments?: string
     }
     shipment?: {
-        status?: {
-            shipmentIsDelayed?: number
-        }
         satus?: {
             shipmentIsDelayed?: number
         }
+        status?: {
+            shipmentIsDelayed?: number
+        }
+
+
     }
 }
 
@@ -39,12 +41,13 @@ export const getShipments = () => {
         return sortedEvents.map(event => {
             let status: 'completed' | 'current' | 'delayed' | 'pending' | 'arrived' | 'in_transit' | 'scheduled' = 'completed'
             
-            const isDelayed = event.shipment?.satus?.shipmentIsDelayed === 1 || 
-                             event.shipment?.status?.shipmentIsDelayed === 1
+            const isDelayed = event.shipment?.satus?.shipmentIsDelayed === 1
             
             const eventStatus = event.eventPosition.status.toLowerCase()
             
-            if (eventStatus.includes('delivered')) {
+            if (isDelayed || eventStatus.includes('delayed')) {
+                status = 'delayed'
+            } else if (eventStatus.includes('delivered')) {
                 status = 'completed'
             } else if (eventStatus.includes('out for delivery')) {
                 status = 'current'
@@ -55,7 +58,7 @@ export const getShipments = () => {
             } else if (eventStatus.includes('schedule')) {
                 status = 'scheduled'
             } else {
-                status = isDelayed ? 'delayed' : 'pending'
+                status = 'pending'
             }
 
             const eventDate = new Date(event.eventDateTime)
@@ -92,9 +95,9 @@ export const getShipments = () => {
         })
     }
 
-    const ship1 = processShipment(shipment1)
-    const ship2 = processShipment(shipment2) 
-    const ship3 = processShipment(shipment3)
+    const ship1 = processShipment(shipment1 as ShipmentEvent[])
+    const ship2 = processShipment(shipment2 as ShipmentEvent[]) 
+    const ship3 = processShipment(shipment3 as ShipmentEvent[])
 
     return { ship1: ship1.reverse(), ship2: ship2.reverse(), ship3: ship3.reverse() }
 }
