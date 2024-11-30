@@ -1,3 +1,6 @@
+
+![image](https://github.com/user-attachments/assets/1e17dd1a-fab9-4272-a514-b16dc039e16a)
+
 # Shipment History UI Application
 
 This repository contains a responsive web application for displaying shipment history with an interactive timeline interface, built according to the provided design specifications.
