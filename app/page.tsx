@@ -1,11 +1,11 @@
 "use client"
 import ShipmentHistory from "@/components/ShipmentHistory"
-import { getShipments } from "@/hooks/fetchdata"
+import { useShipments } from "@/hooks/shipment/useShipments"
 import { useState } from "react"
 
 export default function Page() {
   const [selectedShipment, setSelectedShipment] = useState("1")
-  const {ship1, ship2, ship3} = getShipments()
+  const {ship1, ship2, ship3} = useShipments()
   
   const shipmentMap = {
     "1": ship1,
