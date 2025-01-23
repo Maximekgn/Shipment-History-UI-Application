@@ -1,37 +1,17 @@
-"use client"
-import {
-  BsCheckCircle as ClarityCheckCircleIcon,
-  BsClock as ClarityClockIcon,
-  BsExclamationTriangle as ClarityAlertTriangleIcon,
-  BsTruck as ClarityTruckIcon,
-  BsGeoAlt as ClarityMapMarkerIcon,
-  BsShop as ClarityStorefrontIcon,
-  BsAirplane as ClarityAirplaneIcon,
-  BsWater as ClarityShipIcon,
-  BsBox as ClarityBoxIcon,
-  BsChevronDown as ClarityAngleIcon
-} from 'react-icons/bs'
-import { cn } from "@/lib/utils"
+import { ShipmentDateGroup } from './ShipmentDateGroup'
+import { useShipments } from '@/hooks/shipment/useShipments'
+import { ProcessedShipment } from '@/hooks/shipment/types'
 import { useState } from 'react'
 
-interface ShipmentStep {
-  date: string
-  time: string
-  title: string
-  location: string
-  description?: string
-  status: 'completed' | 'current' | 'delayed' | 'pending' | 'arrived' | 'in_transit' | 'scheduled'
-  shipmentIsDelayed?: boolean
-  shipmentException?: boolean
-}
-
 interface ShipmentHistoryProps {
-  steps: ShipmentStep[]
+  shipmentId: 'ship1' | 'ship2' | 'ship3'
 }
 
-export default function ShipmentHistory({ steps }: ShipmentHistoryProps) {
+export default function ShipmentHistory({ shipmentId }: ShipmentHistoryProps) {
+  const { [shipmentId]: steps } = useShipments()
   const [expandedComments, setExpandedComments] = useState<number[]>([])
 
+  // Toggle comment expansion
   const toggleComment = (index: number) => {
     setExpandedComments(prev => 
       prev.includes(index) 
@@ -40,131 +20,23 @@ export default function ShipmentHistory({ steps }: ShipmentHistoryProps) {
     )
   }
 
-  const getStepIcon = (step: ShipmentStep) => {
-    const iconBaseClasses = "w-5 h-5 flex items-center justify-center rounded-full border-2 bg-white"
-    const iconColor = "text-gray-700"
-    
-    if (step.title === "DELIVERED") {
-      return (
-        <div className={iconBaseClasses}>
-          <ClarityCheckCircleIcon className={`w-3 h-3 ${iconColor}`} />
-        </div>
-      )
-    }
-
-    if (step.title.toLowerCase().includes("arrived")) {
-      return (
-        <div className={iconBaseClasses}>
-          <ClarityMapMarkerIcon className={`w-3 h-3 ${iconColor}`} />
-        </div>
-      )
-    }
-
-    if (step.status === "completed") {
-      const title = step.title.toLowerCase()
-      if (title.includes('transit')) {
-        return (
-          <div className={iconBaseClasses}>
-            <ClarityTruckIcon className={`w-3 h-3 ${iconColor}`} />
-          </div>
-        )
-      }
-      if (title.includes('warehouse') || title.includes('facility')) {
-        return (
-          <div className={iconBaseClasses}>
-            <ClarityStorefrontIcon className={`w-3 h-3 ${iconColor}`} />
-          </div>
-        )
-      }
-      if (title.includes('air')) {
-        return (
-          <div className={iconBaseClasses}>
-            <ClarityAirplaneIcon className={`w-3 h-3 ${iconColor}`} />
-          </div>
-        )
-      }
-      if (title.includes('ship')) {
-        return (
-          <div className={iconBaseClasses}>
-            <ClarityShipIcon className={`w-3 h-3 ${iconColor}`} />
-          </div>
-        )
-      }
-      if (title.includes('package')) {
-        return (
-          <div className={iconBaseClasses}>
-            <ClarityBoxIcon className={`w-3 h-3 ${iconColor}`} />
-          </div>
-        )
-      }
-      return (
-        <div className={iconBaseClasses}>
-          <ClarityCheckCircleIcon className={`w-3 h-3 ${iconColor}`} />
-        </div>
-      )
-    }
-    
-    if (step.status === "delayed" || step.shipmentIsDelayed) {
-      return (
-        <div className={iconBaseClasses}>
-          <ClarityAlertTriangleIcon className={`w-3 h-3 ${iconColor}`} />
-        </div>
-      )
-    }
-    
-    if (step.status === "current") {
-      return (
-        <div className={iconBaseClasses}>
-        </div>
-      )
-    }
-    
-    if (step.status === "scheduled") {
-      return (
-        <div className={iconBaseClasses}>
-          <ClarityClockIcon className={`w-3 h-3 ${iconColor}`} />
-        </div>
-      )
-    }
-
-    if (step.status === "in_transit") {
-      return (
-        <div className={iconBaseClasses}>
-          <ClarityTruckIcon className={`w-3 h-3 ${iconColor}`} />
-        </div>
-      )
-    }
-    
-    return (
-      <div className={iconBaseClasses}>
-      </div>
-    )
-  }
-
+  // Group shipments by date
   const groupedSteps = steps.reduce((acc, step) => {
-    if (!acc[step.date]) {
-      acc[step.date] = []
+    const date = step.date
+    if (!acc[date]) {
+      acc[date] = []
     }
-    acc[step.date].push(step)
+    acc[date].push(step)
     return acc
-  }, {} as Record<string, ShipmentStep[]>)
+  }, {} as Record<string, ProcessedShipment[]>)
 
-  Object.keys(groupedSteps).forEach(date => {
+  // Sort steps by time within each date group
+  for (const date in groupedSteps) {
     groupedSteps[date].sort((a, b) => {
       const timeA = new Date(`2000/01/01 ${a.time}`).getTime()
       const timeB = new Date(`2000/01/01 ${b.time}`).getTime()
-      return timeB - timeA
+      return timeB - timeA // Sort descending
     })
-  })
-
-  const getLineColor = (step: ShipmentStep) => {
-    if (step.shipmentException) return "bg-red-500"
-    if (step.shipmentIsDelayed) return "bg-yellow-400"
-    if (step.status === "delayed") return "bg-yellow-400"
-    if (step.status === "completed") return "bg-green-500"
-    if (step.status === "current") return "bg-sky-500"
-    if (step.status === "in_transit") return "bg-sky-500"
-    return "bg-sky-500"
   }
 
   return (
@@ -172,78 +44,14 @@ export default function ShipmentHistory({ steps }: ShipmentHistoryProps) {
       <h2 className="text-xl font-semibold mb-4 sm:mb-6">Shipment history</h2>
       <div className="relative">
         {Object.entries(groupedSteps).map(([date, dateSteps], groupIndex) => (
-          <div key={date} className="mb-6 sm:mb-8">
-            {dateSteps.map((step, stepIndex) => {
-              const previousStep = stepIndex > 0 ? dateSteps[stepIndex - 1] : null;
-              const showDate = stepIndex === 0 || step.date !== previousStep?.date;
-              const isLastStep = groupIndex === Object.entries(groupedSteps).length - 1 && stepIndex === dateSteps.length - 1;
-              
-              return (
-                <div key={`${groupIndex}-${stepIndex}`} className="grid grid-cols-[140px_auto_1fr] xs:grid-cols-[180px_auto_1fr] sm:grid-cols-[220px_auto_1fr] gap-2 xs:gap-3 sm:gap-4 pb-6 sm:pb-8 relative last:pb-0">
-                  <div className="whitespace-nowrap pt-0.5">
-                    <div className="flex flex-col lg:flex-row lg:gap-2">
-                      <span className={cn(
-                        "text-xs sm:text-sm text-sky-700 w-[80px] xs:w-[90px] sm:w-[100px] flex-shrink-0",
-                        !showDate && "invisible"
-                      )}>{step.date}</span>
-                      <span className="text-xs sm:text-sm text-muted-foreground flex-shrink-0">{step.time}</span>
-                    </div>
-                  </div>
-                  <div className="relative flex flex-col items-center flex-shrink-0">
-                    {!isLastStep && (
-                      <div
-                        className={cn(
-                          "absolute top-5 h-full w-0.5 -translate-x-1/2",
-                          getLineColor(step)
-                        )}
-                      />
-                    )}
-                    <div className={cn(
-                      "relative z-10 rounded-full p-0.5",
-                      getLineColor(step)
-                    )}>
-                      {getStepIcon(step)}
-                    </div>
-                  </div>
-                  <div className="pt-0.5 min-w-0">
-                    <div className="flex flex-col gap-1">
-                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 sm:gap-4">
-                        <h3 className="font-bold text-[#1C355E] text-sm sm:text-base truncate max-w-[200px] sm:max-w-none">{step.title}</h3>
-                        <span className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap flex-shrink-0">{step.location}</span>
-                      </div>
-                    </div>
-                    {step.description && (
-                      <div className="mt-1 max-w-full">
-                        {step.description.split('\n').length > 3 && !expandedComments.includes(stepIndex) ? (
-                          <>
-                            <p className="text-xs sm:text-sm text-muted-foreground line-clamp-3">{step.description}</p>
-                            <button 
-                              onClick={() => toggleComment(stepIndex)}
-                              className="text-xs sm:text-sm text-sky-700 mt-1 flex items-center"
-                            >
-                              View All <ClarityAngleIcon className="w-3 h-3 sm:w-4 sm:h-4 ml-1" />
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <p className="text-xs sm:text-sm text-muted-foreground break-words">{step.description}</p>
-                            {step.description.split('\n').length > 3 && (
-                              <button 
-                                onClick={() => toggleComment(stepIndex)}
-                                className="text-xs sm:text-sm text-sky-700 mt-1 flex items-center"
-                              >
-                                View Less <ClarityAngleIcon className="w-3 h-3 sm:w-4 sm:h-4 ml-1" />
-                              </button>
-                            )}
-                          </>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )
-            })}
-          </div>
+          <ShipmentDateGroup
+            key={date}
+            date={date}
+            steps={dateSteps}
+            expandedComments={expandedComments}
+            onToggleComment={toggleComment}
+            isLastGroup={groupIndex === Object.entries(groupedSteps).length - 1}
+          />
         ))}
       </div>
     </div>
