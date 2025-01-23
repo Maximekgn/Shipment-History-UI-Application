@@ -35,7 +35,7 @@ export function ShipmentStep({
   }
 
   // Check if description should be truncated
-  const hasLongDescription = step.description ? step.description.split('\n').length > 3 : false
+  const hasLongDescription = step.description ? step.description.split('\n').length > 2 : false
   const isExpanded = expandedComments.includes(stepIndex)
   const lineColor = getLineColor(step.status)
 

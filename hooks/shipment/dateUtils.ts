@@ -9,7 +9,9 @@ const getDaySuffix = (day: number): string => {
     }
 }
 
-export const formatEventDate = (eventDateTime: string): { date: string; time: string } => {
+// Format the date and time of an event
+export const formatEventDate = (eventDateTime: string): { date: string; time: string } => 
+{
     const eventDate = new Date(eventDateTime)
     
     // Format time (HH:MM)
